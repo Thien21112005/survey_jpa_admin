@@ -22,7 +22,7 @@ LABEL maintainer="your-email@example.com" \
 RUN rm -rf /usr/local/tomcat/webapps/*
 
 # Copy the built WAR file from Stage 1 into Tomcat's webapps folder
-COPY --from=builder /app/target/BT_02.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=builder /app/target/BT01_JPA.war /usr/local/tomcat/webapps/ROOT.war
 
 # Expose port 8080 (Tomcat's default port for HTTP)
 EXPOSE 8080

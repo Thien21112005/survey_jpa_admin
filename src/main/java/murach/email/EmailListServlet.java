@@ -3,10 +3,15 @@ package murach.email;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.servlet.annotation.WebServlet;
 
 import murach.business.User;
 import murach.data.UserDB;
 
+@WebServlet(
+        name = "EmailListServlet",
+        urlPatterns = {"/emailList"}
+)
 public class EmailListServlet extends HttpServlet {
 
     @Override
@@ -21,6 +26,7 @@ public class EmailListServlet extends HttpServlet {
         if (action == null) {
             action = "join";  // default action
         }
+
         // perform action and set URL to appropriate page
         if (action.equals("join")) {
             url = "/index.html";    // the "join" page
@@ -35,17 +41,27 @@ public class EmailListServlet extends HttpServlet {
             boolean wantEmails = request.getParameter("wantEmails") != null;
             String contactMethod = request.getParameter("contactMethod");
 
-            // store data in User object and save User object in db
+            // store data in User object
             User user = new User(firstName, lastName, email);
             user.setDateOfBirth(dateOfBirth);
             user.setHearAboutUs(hearAboutUs);
             user.setWantAnnouncements(wantAnnouncements);
             user.setWantEmails(wantEmails);
             user.setContactMethod(contactMethod);
-            UserDB.insert(user);
+
+            // Sử dụng save (insert hoặc update) thay vì chỉ insert
+            UserDB.save(user);
 
             // set User object in request object and set URL
             request.setAttribute("user", user);
+
+            // Thêm thông báo để biết là insert hay update
+            if (UserDB.emailExists(email)) {
+                request.setAttribute("message", "Cập nhật thông tin thành công!");
+            } else {
+                request.setAttribute("message", "Đăng ký thành công!");
+            }
+
             url = "/thanks.jsp";   // the "thanks" page
         }
 
