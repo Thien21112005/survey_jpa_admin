@@ -1,0 +1,87 @@
+/* CSS cho trang Khảo sát (Index) */
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+.admin-link {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.admin-link:hover {
+    background-color: #45a049;
+}
+
+label {
+    display: inline-block;
+    width: 120px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+select {
+    padding: 8px;
+    width: 250px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+h1 {
+    color: #333;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 5px;
+    margin-top: 40px;
+}
+
+/* Lưu ý: Selector này chỉ áp dụng nếu h1 là phần tử con đầu tiên.
+   Nếu muốn chọn thẻ h1 đầu tiên xuất hiện, nên dùng h1:first-of-type */
+h1:first-of-type {
+    margin-top: 70px; /* Để không bị che bởi nút admin */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.radio-group, .checkbox-group {
+    margin: 10px 0;
+}
+
+.radio-group label, .checkbox-group label {
+    display: inline;
+    width: auto;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+.radio-group input, .checkbox-group input {
+    margin-right: 5px;
+}

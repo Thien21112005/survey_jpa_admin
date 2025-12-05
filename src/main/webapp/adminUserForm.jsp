@@ -1,82 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>${action == 'add' ? 'Thêm người dùng' : 'Sửa người dùng'}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .form-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-        input[type="text"],
-        input[type="email"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .checkbox-group {
-            margin-bottom: 20px;
-        }
-        .checkbox-group label {
-            display: inline;
-            font-weight: normal;
-            margin-left: 5px;
-        }
-        .button-group {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-        input[type="submit"],
-        .cancel-btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 16px;
-            text-align: center;
-        }
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-        }
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-        .cancel-btn {
-            background-color: #f44336;
-            color: white;
-        }
-        .cancel-btn:hover {
-            background-color: #d32f2f;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="styles/user-form.css">
 </head>
 <body>
 <div class="form-container">
