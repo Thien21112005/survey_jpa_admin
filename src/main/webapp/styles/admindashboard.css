@@ -420,12 +420,84 @@ body {
     overflow-x: auto;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
+    margin-top: 20px;
 }
 
 .users-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 1200px;
+    min-width: 1100px;
+}
+
+/* QUAN TRỌNG: Sửa lỗi display cho các phần tử bảng */
+.users-table,
+.users-table thead,
+.users-table tbody,
+.users-table tr,
+.users-table th,
+.users-table td {
+    display: revert !important; /* Quan trọng: đặt lại về giá trị mặc định của table */
+}
+
+.users-table th,
+.users-table td {
+    display: table-cell !important; /* Đảm bảo th và td là table-cell */
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+}
+
+/* Đặt độ rộng cố định cho các cột */
+.users-table th:nth-child(1),
+.users-table td:nth-child(1) { /* Cột Email */
+    width: 22%;
+    min-width: 220px;
+}
+
+.users-table th:nth-child(2),
+.users-table td:nth-child(2) { /* Cột Họ */
+    width: 10%;
+    min-width: 100px;
+}
+
+.users-table th:nth-child(3),
+.users-table td:nth-child(3) { /* Cột Tên */
+    width: 10%;
+    min-width: 100px;
+}
+
+.users-table th:nth-child(4),
+.users-table td:nth-child(4) { /* Cột Ngày sinh */
+    width: 10%;
+    min-width: 120px;
+}
+
+.users-table th:nth-child(5),
+.users-table td:nth-child(5) { /* Cột Biết qua */
+    width: 12%;
+    min-width: 130px;
+}
+
+.users-table th:nth-child(6),
+.users-table td:nth-child(6) { /* Cột Thông báo */
+    width: 8%;
+    min-width: 100px;
+}
+
+.users-table th:nth-child(7),
+.users-table td:nth-child(7) { /* Cột Email QC */
+    width: 8%;
+    min-width: 100px;
+}
+
+.users-table th:nth-child(8),
+.users-table td:nth-child(8) { /* Cột Liên hệ */
+    width: 12%;
+    min-width: 130px;
+}
+
+.users-table th:nth-child(9),
+.users-table td:nth-child(9) { /* Cột Hành động */
+    width: 8%;
+    min-width: 140px;
 }
 
 .users-table thead {
@@ -433,7 +505,7 @@ body {
 }
 
 .users-table th {
-    padding: 18px 15px;
+    padding: 15px 12px;
     text-align: left;
     font-weight: 600;
     color: white;
@@ -442,6 +514,7 @@ body {
     position: relative;
     cursor: pointer;
     user-select: none;
+    white-space: nowrap;
 }
 
 .users-table th:last-child {
@@ -495,7 +568,7 @@ body {
 }
 
 .users-table td {
-    padding: 18px 15px;
+    padding: 15px 12px;
     border-right: 1px solid var(--border-color);
 }
 
@@ -507,62 +580,71 @@ body {
 .email-cell {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .user-avatar {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--secondary-color), #3AAFA9);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 1.1rem;
+    font-size: 1rem;
     flex-shrink: 0;
 }
 
 .email-info {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    flex: 1;
 }
 
 .email {
     font-weight: 600;
     color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .joined-date {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-light);
+    margin-top: 2px;
 }
 
 /* Badges */
 .date-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: var(--bg-light);
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 20px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-dark);
+    white-space: nowrap;
 }
 
 .date-badge i {
     color: var(--accent-color);
+    font-size: 0.9rem;
 }
 
 .source-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 15px;
+    gap: 6px;
+    padding: 5px 12px;
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 500;
     color: white;
+    white-space: nowrap;
 }
 
 .search-engine {
@@ -583,11 +665,13 @@ body {
 
 .status-badge {
     display: inline-block;
-    padding: 6px 15px;
+    padding: 6px 12px;
     border-radius: 20px;
     font-size: 0.85rem;
     font-weight: 500;
     min-width: 60px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .status-badge.active {
@@ -605,28 +689,32 @@ body {
 .contact-method {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     color: var(--text-dark);
+    white-space: nowrap;
+    font-size: 0.9rem;
 }
 
 .contact-method i {
     color: var(--primary-color);
+    font-size: 0.9rem;
 }
 
 /* Action Cell */
 .action-cell {
-    min-width: 150px;
+    text-align: center;
 }
 
 .action-buttons {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
+    flex-wrap: nowrap;
 }
 
 .action-buttons a, .action-buttons button {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -635,7 +723,8 @@ body {
     transition: var(--transition);
     border: none;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    flex-shrink: 0;
 }
 
 .edit-btn {
@@ -723,6 +812,7 @@ body {
     margin-left: auto;
     color: var(--text-light);
     font-size: 0.9rem;
+    white-space: nowrap;
 }
 
 .pagination-info strong {
@@ -885,6 +975,35 @@ body {
     .stats-cards {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .users-table {
+        min-width: 1000px;
+    }
+
+    .users-table th,
+    .users-table td {
+        padding: 12px 10px;
+    }
+}
+
+@media (max-width: 992px) {
+    .users-table {
+        min-width: 900px;
+    }
+
+    .user-avatar {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .email {
+        font-size: 0.9rem;
+    }
+
+    .joined-date {
+        font-size: 0.75rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -934,6 +1053,18 @@ body {
     .footer-links {
         justify-content: center;
     }
+
+    .users-table {
+        min-width: 850px;
+    }
+
+    .table-container {
+        margin-left: -15px;
+        margin-right: -15px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
 }
 
 @media (max-width: 480px) {
@@ -974,4 +1105,37 @@ body {
     .stat-trend {
         margin-left: 0;
     }
+
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .pagination-info {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+}
+/* FIX FOR SEARCH FUNCTIONALITY */
+.users-table tbody tr {
+    display: table-row !important;
+    transition: none !important;
+}
+
+/* When hiding rows with JavaScript */
+.users-table tbody tr[style*="display: none"] {
+    display: none !important;
+}
+
+/* Alternative approach: use visibility and height */
+.users-table tbody tr.hidden-row {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
 }

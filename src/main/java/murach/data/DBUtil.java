@@ -49,7 +49,7 @@ public class DBUtil {
                 config.setMaxLifetime(1800000); // 30 minutes
                 config.setConnectionTestQuery("SELECT 1");
 
-                // MySQL optimizations
+                // MySQL optimizations (cũ)
                 config.addDataSourceProperty("cachePrepStmts", "true");
                 config.addDataSourceProperty("prepStmtCacheSize", "250");
                 config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
@@ -60,6 +60,11 @@ public class DBUtil {
                 config.addDataSourceProperty("cacheServerConfiguration", "true");
                 config.addDataSourceProperty("elideSetAutoCommits", "true");
                 config.addDataSourceProperty("maintainTimeStats", "false");
+
+                // THÊM ĐÂY ĐỂ HỖ TRỢ UTF-8 (quan trọng cho tiếng Việt)
+                config.addDataSourceProperty("useUnicode", "true");
+                config.addDataSourceProperty("characterEncoding", "UTF-8");
+                config.addDataSourceProperty("connectionCollation", "utf8mb4_unicode_ci");
 
                 dataSource = new HikariDataSource(config);
 

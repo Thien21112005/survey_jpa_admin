@@ -81,7 +81,7 @@
           Danh sách người dùng
         </h2>
         <div class="section-actions">
-          <button class="export-btn">
+          <button class="export-btn" id="exportExcelBtn">
             <i class="fas fa-download"></i>
             Xuất Excel
           </button>
@@ -104,7 +104,7 @@
 
       <c:if test="${not empty users}">
         <div class="table-container">
-          <table class="users-table">
+          <table class="users-table" id="usersTable">
             <thead>
             <tr>
               <th class="sortable" data-sort="email">
@@ -127,7 +127,7 @@
               <th class="text-center">Hành động</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="tableBody">
             <c:forEach var="user" items="${users}" varStatus="status">
               <tr class="${status.index % 2 == 0 ? 'even' : 'odd'}">
                 <td class="email-cell">
@@ -142,36 +142,36 @@
                 <td>${user.firstName}</td>
                 <td>${user.lastName}</td>
                 <td>
-                                            <span class="date-badge">
-                                                <i class="fas fa-birthday-cake"></i>
-                                                ${user.dateOfBirth}
-                                            </span>
+                  <span class="date-badge">
+                    <i class="fas fa-birthday-cake"></i>
+                    ${user.dateOfBirth}
+                  </span>
                 </td>
                 <td>
                   <c:choose>
                     <c:when test="${user.hearAboutUs == 'searchEngine'}">
-                                                    <span class="source-badge search-engine">
-                                                        <i class="fas fa-search"></i>
-                                                        Tìm kiếm
-                                                    </span>
+                      <span class="source-badge search-engine">
+                        <i class="fas fa-search"></i>
+                        Tìm kiếm
+                      </span>
                     </c:when>
                     <c:when test="${user.hearAboutUs == 'wordOfMouth'}">
-                                                    <span class="source-badge word-of-mouth">
-                                                        <i class="fas fa-comments"></i>
-                                                        Giới thiệu
-                                                    </span>
+                      <span class="source-badge word-of-mouth">
+                        <i class="fas fa-comments"></i>
+                        Giới thiệu
+                      </span>
                     </c:when>
                     <c:when test="${user.hearAboutUs == 'socialMedia'}">
-                                                    <span class="source-badge social-media">
-                                                        <i class="fas fa-hashtag"></i>
-                                                        Mạng xã hội
-                                                    </span>
+                      <span class="source-badge social-media">
+                        <i class="fas fa-hashtag"></i>
+                        Mạng xã hội
+                      </span>
                     </c:when>
                     <c:when test="${user.hearAboutUs == 'other'}">
-                                                    <span class="source-badge other">
-                                                        <i class="fas fa-ellipsis-h"></i>
-                                                        Khác
-                                                    </span>
+                      <span class="source-badge other">
+                        <i class="fas fa-ellipsis-h"></i>
+                        Khác
+                      </span>
                     </c:when>
                   </c:choose>
                 </td>
@@ -188,22 +188,22 @@
                 <td>
                   <c:choose>
                     <c:when test="${user.contactMethod == 'emailOnly'}">
-                                                    <span class="contact-method">
-                                                        <i class="fas fa-envelope"></i>
-                                                        Chỉ email
-                                                    </span>
+                      <span class="contact-method">
+                        <i class="fas fa-envelope"></i>
+                        Chỉ email
+                      </span>
                     </c:when>
                     <c:when test="${user.contactMethod == 'postalOnly'}">
-                                                    <span class="contact-method">
-                                                        <i class="fas fa-mail-bulk"></i>
-                                                        Chỉ thư
-                                                    </span>
+                      <span class="contact-method">
+                        <i class="fas fa-mail-bulk"></i>
+                        Chỉ thư
+                      </span>
                     </c:when>
                     <c:when test="${user.contactMethod == 'emailOrPostal'}">
-                                                    <span class="contact-method">
-                                                        <i class="fas fa-mailbox"></i>
-                                                        Email/Thư
-                                                    </span>
+                      <span class="contact-method">
+                        <i class="fas fa-mailbox"></i>
+                        Email/Thư
+                      </span>
                     </c:when>
                   </c:choose>
                 </td>
@@ -343,14 +343,53 @@
 
 <!-- JavaScript for Interactive Features -->
 <script>
-  // Search functionality
+  // Load SheetJS library dynamically
+  function loadSheetJS() {
+    return new Promise((resolve, reject) => {
+      if (typeof XLSX !== 'undefined') {
+        resolve();
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js';
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  // Search functionality - SIMPLIFIED AND WORKING VERSION
   document.getElementById('userSearch').addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const rows = document.querySelectorAll('.users-table tbody tr');
+    const searchTerm = e.target.value.toLowerCase().trim();
+    const rows = document.querySelectorAll('#tableBody tr');
+
+    console.log('Searching for:', searchTerm, 'in', rows.length, 'rows');
+
+    if (searchTerm === '') {
+      // Show all rows when search is empty
+      rows.forEach(row => {
+        row.classList.remove('hidden-row');
+      });
+      return;
+    }
 
     rows.forEach(row => {
-      const text = row.textContent.toLowerCase();
-      row.style.display = text.includes(searchTerm) ? '' : 'none';
+      // Get all text content from the row
+      let rowText = '';
+
+      // Collect text from all cells
+      const cells = row.querySelectorAll('td');
+      cells.forEach(cell => {
+        rowText += ' ' + cell.textContent.toLowerCase();
+      });
+
+      // Check if search term is in row text
+      if (rowText.includes(searchTerm)) {
+        row.classList.remove('hidden-row');
+      } else {
+        row.classList.add('hidden-row');
+      }
     });
   });
 
@@ -360,7 +399,7 @@
       const table = this.closest('table');
       const tbody = table.querySelector('tbody');
       const columnIndex = Array.from(this.parentNode.children).indexOf(this);
-      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const rows = Array.from(tbody.querySelectorAll('tr:not(.hidden-row)'));
       const isAsc = this.classList.contains('asc');
 
       // Remove sort classes from all headers
@@ -370,13 +409,24 @@
 
       // Sort rows
       rows.sort((a, b) => {
-        const aText = a.children[columnIndex].textContent.trim();
-        const bText = b.children[columnIndex].textContent.trim();
+        let aText, bText;
+
+        // Lấy text từ cột tương ứng
+        if (columnIndex === 0) { // Cột Email
+          aText = a.querySelector('.email').textContent.trim();
+          bText = b.querySelector('.email').textContent.trim();
+        } else if (columnIndex === 1 || columnIndex === 2) { // Cột Họ và Tên
+          aText = a.cells[columnIndex].textContent.trim();
+          bText = b.cells[columnIndex].textContent.trim();
+        } else {
+          aText = a.cells[columnIndex].textContent.trim();
+          bText = b.cells[columnIndex].textContent.trim();
+        }
 
         if (!isAsc) {
-          return aText.localeCompare(bText);
+          return aText.localeCompare(bText, 'vi', { sensitivity: 'base' });
         } else {
-          return bText.localeCompare(aText);
+          return bText.localeCompare(aText, 'vi', { sensitivity: 'base' });
         }
       });
 
@@ -403,6 +453,129 @@
       }
     });
   });
+
+  // Function to show notification
+  function showNotification(message, type) {
+    // Tạo thông báo
+    const notification = document.createElement('div');
+    notification.className = 'notification ' + type;
+    notification.style.cssText =
+            'position: fixed;' +
+            'top: 20px;' +
+            'right: 20px;' +
+            'padding: 15px 20px;' +
+            'border-radius: 8px;' +
+            'color: white;' +
+            'font-weight: 500;' +
+            'z-index: 10000;' +
+            'animation: slideIn 0.3s ease;' +
+            'box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
+
+    if (type === 'success') {
+      notification.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+    } else if (type === 'error') {
+      notification.style.background = 'linear-gradient(135deg, #F44336, #D32F2F)';
+    }
+
+    const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+    notification.innerHTML =
+            '<i class="fas ' + iconClass + '"></i>' +
+            '<span style="margin-left: 10px;">' + message + '</span>';
+
+    document.body.appendChild(notification);
+
+    // Tự động xóa sau 3 giây
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 300);
+    }, 3000);
+  }
+
+  // Export to Excel functionality
+  document.getElementById('exportExcelBtn').addEventListener('click', async function() {
+    const btn = this;
+    const originalText = btn.innerHTML;
+
+    try {
+      // Hiển thị trạng thái loading
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xuất...';
+      btn.disabled = true;
+
+      // Load SheetJS nếu chưa có
+      await loadSheetJS();
+
+      // Lấy bảng
+      const table = document.getElementById('usersTable');
+
+      // Tạo workbook từ bảng
+      const wb = XLSX.utils.table_to_book(table, { sheet: "Danh sách người dùng" });
+
+      // Tạo tên file với ngày hiện tại
+      const date = new Date();
+      const dateStr = date.getFullYear() + '-' +
+              String(date.getMonth() + 1).padStart(2, '0') + '-' +
+              String(date.getDate()).padStart(2, '0');
+
+      // Xuất file Excel
+      XLSX.writeFile(wb, 'danh_sach_nguoi_dung_' + dateStr + '.xlsx');
+
+      // Hiển thị thông báo thành công
+      showNotification('Xuất Excel thành công!', 'success');
+
+    } catch (error) {
+      console.error('Lỗi khi xuất Excel:', error);
+      showNotification('Có lỗi xảy ra khi xuất Excel!', 'error');
+    } finally {
+      // Khôi phục trạng thái nút
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  });
+
+  // Add CSS for notifications
+  const style = document.createElement('style');
+  style.textContent =
+          '@keyframes slideIn {' +
+          '  from {' +
+          '    transform: translateX(100%);' +
+          '    opacity: 0;' +
+          '  }' +
+          '  to {' +
+          '    transform: translateX(0);' +
+          '    opacity: 1;' +
+          '  }' +
+          '}' +
+          '' +
+          '@keyframes slideOut {' +
+          '  from {' +
+          '    transform: translateX(0);' +
+          '    opacity: 1;' +
+          '  }' +
+          '  to {' +
+          '    transform: translateX(100%);' +
+          '    opacity: 0;' +
+          '  }' +
+          '}';
+
+  // Add CSS for hidden rows
+  style.textContent +=
+          '.hidden-row {' +
+          '  display: none !important;' +
+          '  visibility: hidden !important;' +
+          '  height: 0 !important;' +
+          '  opacity: 0 !important;' +
+          '  overflow: hidden !important;' +
+          '}';
+
+  document.head.appendChild(style);
+
+  // DEBUG: Kiểm tra sự kiện search
+  console.log('Search input element:', document.getElementById('userSearch'));
+  console.log('Total rows in table:', document.querySelectorAll('.users-table tbody tr').length);
 </script>
 </body>
 </html>

@@ -121,7 +121,7 @@
             <i class="fas fa-id-card"></i>
             <span>Mã người dùng</span>
           </div>
-          <div class="info-value">#${user.email.hashCode().abs() % 10000}</div>
+          <div class="info-value">#${Math.abs(user.email.hashCode()) % 10000}</div>
         </div>
       </div>
     </div>

@@ -1,557 +1,330 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${action == 'add' ? 'Thêm người dùng' : 'Sửa người dùng'} | Admin System</title>
+    <title>${action == 'add' ? 'Thêm Người Dùng Mới' : 'Chỉnh Sửa Người Dùng'} | Admin System</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="styles/user-form.css">
+    <link rel="stylesheet" type="text/css" href="styles/adminuserform.css">
 </head>
 <body>
-<!-- Background Animation -->
-<div class="bg-animation">
-    <div class="circle circle-1"></div>
-    <div class="circle circle-2"></div>
-    <div class="circle circle-3"></div>
+<!-- Particle Background -->
+<div class="particle-container">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+
+<!-- Floating Elements -->
+<div class="floating-element">
+    <i class="fas fa-user-cog"></i>
+</div>
+<div class="floating-element">
+    <i class="fas fa-database"></i>
 </div>
 
 <!-- Main Form Container -->
-<div class="form-container">
-    <!-- Header Section -->
+<div class="glass-form">
+    <!-- Header -->
     <header class="form-header">
-        <div class="header-icon">
-            <i class="fas ${action == 'add' ? 'fa-user-plus' : 'fa-user-edit'}"></i>
+        <div class="header-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
         </div>
         <div class="header-content">
-            <h1>${action == 'add' ? 'Thêm người dùng mới' : 'Sửa thông tin người dùng'}</h1>
-            <p class="subtitle">
-                ${action == 'add' ?
-                        'Điền thông tin để thêm người dùng mới vào hệ thống' :
-                        'Cập nhật thông tin người dùng hiện tại'}
-            </p>
-        </div>
-        <div class="form-step">
-            <div class="step-indicator active">1</div>
-            <div class="step-indicator ${action == 'update' ? 'active' : ''}">2</div>
-            <div class="step-indicator">3</div>
+            <div class="header-main">
+                <div class="header-icon">
+                    <i class="fas fa-user-${action == 'add' ? 'plus' : 'edit'}"></i>
+                </div>
+                <div class="header-text">
+                    <h1><span>${action == 'add' ? 'Thêm' : 'Chỉnh Sửa'}</span> Người Dùng</h1>
+                    <p>Quản lý thông tin chi tiết người dùng hệ thống</p>
+                </div>
+            </div>
+            <div class="back-action">
+                <a href="admin?action=list" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Quay lại danh sách</span>
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Main Form -->
-    <form action="admin" method="post" class="user-form" id="userForm">
-        <input type="hidden" name="action" value="${action}">
-
-        <c:if test="${action == 'update'}">
-            <input type="hidden" name="originalEmail" value="${user.email}">
+    <!-- Form -->
+    <form action="admin" method="post" accept-charset="UTF-8" class="user-form">
+        <input type="hidden" name="action" value="${action == 'add' ? 'add' : 'update'}">
+        <c:if test="${action != 'add'}">
+            <input type="hidden" name="email" value="${user.email}">
         </c:if>
 
-        <!-- Basic Information Section -->
+        <!-- Personal Information -->
         <section class="form-section">
             <div class="section-header">
-                <i class="fas fa-id-card"></i>
-                <h2>Thông tin cơ bản</h2>
+                <div class="section-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2>Thông tin cá nhân</h2>
             </div>
-
             <div class="form-grid">
-                <!-- Email Input -->
-                <div class="input-group floating-label">
-                    <div class="input-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-user label-icon"></i>
+                        Họ
+                    </label>
                     <div class="input-wrapper">
-                        <input type="email" id="email" name="email"
-                               value="${user.email}"
-                        ${action == 'update' ? 'readonly' : ''}
-                               required
-                               class="form-control"
-                               placeholder=" ">
-                        <label for="email">Địa chỉ email</label>
-                        <div class="input-focus-line"></div>
-                    </div>
-                    <c:if test="${action == 'update'}">
-                        <div class="input-note">
-                            <i class="fas fa-info-circle"></i>
-                            Email không thể thay đổi
-                        </div>
-                    </c:if>
-                </div>
-
-                <!-- First Name Input -->
-                <div class="input-group floating-label">
-                    <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="input-wrapper">
-                        <input type="text" id="firstName" name="firstName"
-                               value="${user.firstName}"
-                               required
-                               class="form-control"
-                               placeholder=" ">
-                        <label for="firstName">Họ</label>
-                        <div class="input-focus-line"></div>
+                        <input type="text" name="firstName" value="${user.firstName}" required>
+                        <div class="input-focus-border"></div>
                     </div>
                 </div>
 
-                <!-- Last Name Input -->
-                <div class="input-group floating-label">
-                    <div class="input-icon">
-                        <i class="fas fa-signature"></i>
-                    </div>
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-signature label-icon"></i>
+                        Tên
+                    </label>
                     <div class="input-wrapper">
-                        <input type="text" id="lastName" name="lastName"
-                               value="${user.lastName}"
-                               required
-                               class="form-control"
-                               placeholder=" ">
-                        <label for="lastName">Tên</label>
-                        <div class="input-focus-line"></div>
+                        <input type="text" name="lastName" value="${user.lastName}" required>
+                        <div class="input-focus-border"></div>
                     </div>
                 </div>
 
-                <!-- Date of Birth Input -->
-                <div class="input-group floating-label">
-                    <div class="input-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-envelope label-icon"></i>
+                        Địa chỉ email
+                    </label>
                     <div class="input-wrapper">
-                        <input type="text" id="dateOfBirth" name="dateOfBirth"
-                               value="${user.dateOfBirth}"
-                               required
-                               class="form-control date-input"
-                               placeholder=" "
-                               pattern="\d{2}/\d{2}/\d{4}"
-                               title="Định dạng ngày: dd/mm/yyyy">
-                        <label for="dateOfBirth">Ngày sinh (dd/mm/yyyy)</label>
-                        <div class="input-focus-line"></div>
+                        <input type="email" name="email" value="${user.email}" ${action == 'add' ? 'required' : 'readonly'}>
+                        <div class="input-focus-border"></div>
                     </div>
-                    <div class="input-note">
-                        <i class="fas fa-calendar-check"></i>
-                        Ví dụ: 25/12/1990
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-calendar-alt label-icon"></i>
+                        Ngày sinh
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" name="dateOfBirth" value="${user.dateOfBirth}" required placeholder="dd/mm/yyyy">
+                        <div class="input-focus-border"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Preferences Section -->
+        <!-- Preferences -->
         <section class="form-section">
             <div class="section-header">
-                <i class="fas fa-sliders-h"></i>
-                <h2>Tùy chọn và sở thích</h2>
-            </div>
-
-            <!-- How did you hear about us -->
-            <div class="input-group">
-                <div class="input-label">
-                    <i class="fas fa-bullhorn"></i>
-                    <label for="hearAboutUs">Biết đến chúng tôi qua</label>
+                <div class="section-icon">
+                    <i class="fas fa-cog"></i>
                 </div>
-                <div class="select-wrapper">
-                    <select id="hearAboutUs" name="hearAboutUs" class="form-control select-box">
-                        <option value="searchEngine" ${user.hearAboutUs == 'searchEngine' ? 'selected' : ''}>
-                            <i class="fas fa-search"></i> Công cụ tìm kiếm
-                        </option>
-                        <option value="wordOfMouth" ${user.hearAboutUs == 'wordOfMouth' ? 'selected' : ''}>
-                            <i class="fas fa-comments"></i> Người giới thiệu
-                        </option>
-                        <option value="socialMedia" ${user.hearAboutUs == 'socialMedia' ? 'selected' : ''}>
-                            <i class="fas fa-hashtag"></i> Mạng xã hội
-                        </option>
-                        <option value="other" ${user.hearAboutUs == 'other' ? 'selected' : ''}>
-                            <i class="fas fa-ellipsis-h"></i> Khác
-                        </option>
-                    </select>
-                    <div class="select-arrow">
-                        <i class="fas fa-chevron-down"></i>
+                <h2>Tùy chọn</h2>
+            </div>
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label>
+                        <i class="fas fa-search-location label-icon"></i>
+                        Biết về chúng tôi qua
+                    </label>
+                    <div class="selection-group">
+                        <div class="radio-group">
+                            <label class="selection-item">
+                                <input type="radio" name="hearAboutUs" value="searchEngine" ${user.hearAboutUs == 'searchEngine' ? 'checked' : ''}>
+                                <div class="selection-card">
+                                    <div class="selection-icon">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                    <div class="selection-content">
+                                        <div class="selection-title">Tìm kiếm</div>
+                                        <div class="selection-description">Google, Bing, v.v.</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="selection-item">
+                                <input type="radio" name="hearAboutUs" value="wordOfMouth" ${user.hearAboutUs == 'wordOfMouth' ? 'checked' : ''}>
+                                <div class="selection-card">
+                                    <div class="selection-icon">
+                                        <i class="fas fa-comment-dots"></i>
+                                    </div>
+                                    <div class="selection-content">
+                                        <div class="selection-title">Giới thiệu</div>
+                                        <div class="selection-description">Bạn bè, đồng nghiệp</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="selection-item">
+                                <input type="radio" name="hearAboutUs" value="socialMedia" ${user.hearAboutUs == 'socialMedia' ? 'checked' : ''}>
+                                <div class="selection-card">
+                                    <div class="selection-icon">
+                                        <i class="fas fa-hashtag"></i>
+                                    </div>
+                                    <div class="selection-content">
+                                        <div class="selection-title">Mạng xã hội</div>
+                                        <div class="selection-description">Facebook, Twitter, Instagram</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="selection-item">
+                                <input type="radio" name="hearAboutUs" value="other" ${user.hearAboutUs == 'other' ? 'checked' : ''}>
+                                <div class="selection-card">
+                                    <div class="selection-icon">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </div>
+                                    <div class="selection-content">
+                                        <div class="selection-title">Khác</div>
+                                        <div class="selection-description">Phương thức khác</div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Notification Preferences -->
-            <div class="preferences-group">
-                <div class="preferences-label">
-                    <i class="fas fa-bell"></i>
-                    <span>Tùy chọn thông báo</span>
-                </div>
-
-                <div class="checkbox-options">
-                    <div class="checkbox-option">
-                        <input type="checkbox" id="wantAnnouncements" name="wantAnnouncements"
-                               value="yes" ${user.wantAnnouncements ? 'checked' : ''}
-                               class="checkbox-input">
-                        <label for="wantAnnouncements" class="checkbox-label">
-                            <div class="checkbox-box">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="checkbox-content">
-                                <span class="checkbox-title">Nhận thông báo</span>
-                                <span class="checkbox-description">Thông báo về CD mới và ưu đãi đặc biệt</span>
-                            </div>
-                        </label>
-                    </div>
-
-                    <div class="checkbox-option">
-                        <input type="checkbox" id="wantEmails" name="wantEmails"
-                               value="yes" ${user.wantEmails ? 'checked' : ''}
-                               class="checkbox-input">
-                        <label for="wantEmails" class="checkbox-label">
-                            <div class="checkbox-box">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="checkbox-content">
-                                <span class="checkbox-title">Nhận email quảng cáo</span>
-                                <span class="checkbox-description">Email về sản phẩm và khuyến mãi</span>
-                            </div>
-                        </label>
+                <div class="form-group full-width">
+                    <label>
+                        <i class="fas fa-bell label-icon"></i>
+                        Thông báo
+                    </label>
+                    <div class="selection-group">
+                        <div class="checkbox-group">
+                            <label class="selection-item">
+                                <input type="checkbox" name="wantAnnouncements" ${user.wantAnnouncements ? 'checked' : ''}>
+                                <div class="checkbox-card">
+                                    <div class="checkbox-icon"></div>
+                                    <div class="selection-content">
+                                        <div class="selection-title">Muốn nhận thông báo</div>
+                                        <div class="selection-description">Cập nhật và thông báo mới nhất</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="selection-item">
+                                <input type="checkbox" name="wantEmails" ${user.wantEmails ? 'checked' : ''}>
+                                <div class="checkbox-card">
+                                    <div class="checkbox-icon"></div>
+                                    <div class="selection-content">
+                                        <div class="selection-title">Muốn nhận email quảng cáo</div>
+                                        <div class="selection-description">Khuyến mãi và ưu đãi đặc biệt</div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Contact Method -->
-            <div class="input-group">
-                <div class="input-label">
-                    <i class="fas fa-address-book"></i>
-                    <label for="contactMethod">Phương thức liên hệ ưa thích</label>
-                </div>
-                <div class="select-wrapper">
-                    <select id="contactMethod" name="contactMethod" class="form-control select-box">
-                        <option value="emailOrPostal" ${user.contactMethod == 'emailOrPostal' ? 'selected' : ''}>
-                            <i class="fas fa-mailbox"></i> Email hoặc thư bưu điện
-                        </option>
-                        <option value="emailOnly" ${user.contactMethod == 'emailOnly' ? 'selected' : ''}>
-                            <i class="fas fa-envelope"></i> Chỉ email
-                        </option>
-                        <option value="postalOnly" ${user.contactMethod == 'postalOnly' ? 'selected' : ''}>
-                            <i class="fas fa-mail-bulk"></i> Chỉ thư bưu điện
-                        </option>
-                    </select>
-                    <div class="select-arrow">
-                        <i class="fas fa-chevron-down"></i>
+                <div class="form-group full-width">
+                    <label>
+                        <i class="fas fa-envelope-open-text label-icon"></i>
+                        Phương thức liên hệ
+                    </label>
+                    <div class="selection-group">
+                        <div class="radio-group">
+                            <label class="selection-item">
+                                <input type="radio" name="contactMethod" value="emailOnly" ${user.contactMethod == 'emailOnly' ? 'checked' : ''}>
+                                <div class="selection-card">
+                                    <div class="selection-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="selection-content">
+                                        <div class="selection-title">Chỉ email</div>
+                                        <div class="selection-description">Nhận thông tin qua email</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="selection-item">
+                                <input type="radio" name="contactMethod" value="postalOnly" ${user.contactMethod == 'postalOnly' ? 'checked' : ''}>
+                                <div class="selection-card">
+                                    <div class="selection-icon">
+                                        <i class="fas fa-mail-bulk"></i>
+                                    </div>
+                                    <div class="selection-content">
+                                        <div class="selection-title">Chỉ thư</div>
+                                        <div class="selection-description">Nhận thông tin qua bưu điện</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="selection-item">
+                                <input type="radio" name="contactMethod" value="emailOrPostal" ${user.contactMethod == 'emailOrPostal' ? 'checked' : ''}>
+                                <div class="selection-card">
+                                    <div class="selection-icon">
+                                        <i class="fas fa-mailbox"></i>
+                                    </div>
+                                    <div class="selection-content">
+                                        <div class="selection-title">Email hoặc thư</div>
+                                        <div class="selection-description">Linh hoạt cả hai phương thức</div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Form Actions -->
-        <div class="form-actions">
-            <div class="action-buttons">
-                <button type="submit" class="submit-btn">
-                    <i class="fas ${action == 'add' ? 'fa-user-plus' : 'fa-save'}"></i>
-                    <span class="btn-text">${action == 'add' ? 'Thêm người dùng' : 'Cập nhật thông tin'}</span>
-                    <i class="fas fa-arrow-right btn-arrow"></i>
-                </button>
-
-                <a href="admin?action=list" class="cancel-btn">
-                    <i class="fas fa-times"></i>
-                    <span>Hủy bỏ</span>
-                </a>
-            </div>
-
-            <div class="form-note">
-                <i class="fas fa-shield-alt"></i>
-                <span>Thông tin người dùng sẽ được bảo mật theo chính sách riêng tư của chúng tôi</span>
-            </div>
-        </div>
-
-        <!-- Form Progress -->
-        <div class="form-progress">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="progress-text">
-                <span id="progressText">Đang hoàn thành thông tin...</span>
-                <span id="progressPercent">0%</span>
-            </div>
+        <!-- Submit Button -->
+        <div class="submit-section">
+            <button type="submit" class="action-btn submit-btn">
+                <i class="fas fa-save"></i>
+                <span>${action == 'add' ? 'Thêm Người Dùng' : 'Cập Nhật Thông Tin'}</span>
+            </button>
+            <a href="admin?action=list" class="action-btn cancel-btn">
+                <i class="fas fa-times"></i>
+                <span>Hủy bỏ</span>
+            </a>
         </div>
     </form>
-
-    <!-- Form Help -->
-    <div class="form-help">
-        <div class="help-item">
-            <i class="fas fa-question-circle"></i>
-            <div class="help-content">
-                <h3>Cần hỗ trợ?</h3>
-                <p>Liên hệ quản trị viên nếu bạn cần trợ giúp khi điền thông tin</p>
-            </div>
-        </div>
-        <div class="help-item">
-            <i class="fas fa-clock"></i>
-            <div class="help-content">
-                <h3>Thời gian xử lý</h3>
-                <p>Thông tin sẽ được cập nhật ngay lập tức sau khi gửi</p>
-            </div>
-        </div>
-    </div>
 </div>
 
-<!-- JavaScript -->
 <script>
-    // Form Validation and Progress
-    const form = document.getElementById('userForm');
-    const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('progressText');
-    const progressPercent = document.getElementById('progressPercent');
+    // Function to show notification - SỬA LỖI CÚ PHÁP
+    function showNotification(message, type) {
+        // Tạo thông báo
+        const notification = document.createElement('div');
+        notification.className = 'notification ' + type;
+        notification.style.cssText =
+            'position: fixed;' +
+            'top: 20px;' +
+            'right: 20px;' +
+            'padding: 15px 20px;' +
+            'border-radius: 8px;' +
+            'color: white;' +
+            'font-weight: 500;' +
+            'z-index: 10000;' +
+            'animation: slideIn 0.3s ease;' +
+            'box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
 
-    // Form fields
-    const fields = [
-        { id: 'email', required: true },
-        { id: 'firstName', required: true },
-        { id: 'lastName', required: true },
-        { id: 'dateOfBirth', required: true },
-        { id: 'hearAboutUs', required: false },
-        { id: 'contactMethod', required: false }
-    ];
-
-    // Calculate form completion
-    function calculateProgress() {
-        let completed = 0;
-        let totalRequired = 0;
-
-        fields.forEach(field => {
-            const element = document.getElementById(field.id);
-            if (element) {
-                if (field.required) {
-                    totalRequired++;
-                    if (element.value.trim() !== '' &&
-                        (element.type !== 'checkbox' || element.checked)) {
-                        completed++;
-                    }
-                }
-            }
-        });
-
-        // Add checkboxes
-        const wantAnnouncements = document.getElementById('wantAnnouncements');
-        const wantEmails = document.getElementById('wantEmails');
-
-        // Checkboxes are optional, so we don't count them in required total
-        // But we can count them as bonus completion if filled
-
-        const progress = totalRequired > 0 ? (completed / totalRequired) * 100 : 0;
-
-        // Update progress bar
-        progressFill.style.width = `${progress}%`;
-        progressPercent.textContent = `${Math.round(progress)}%`;
-
-        // Update progress text
-        if (progress === 0) {
-            progressText.textContent = 'Bắt đầu điền thông tin...';
-        } else if (progress < 50) {
-            progressText.textContent = 'Đang hoàn thành thông tin cơ bản...';
-        } else if (progress < 100) {
-            progressText.textContent = 'Gần hoàn tất...';
-        } else {
-            progressText.textContent = 'Thông tin đã đầy đủ!';
+        // SỬA LẠI: Dùng JavaScript thay vì EL
+        if (type === 'success') {
+            notification.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+        } else if (type === 'error') {
+            notification.style.background = 'linear-gradient(135deg, #F44336, #D32F2F)';
         }
 
-        return progress;
-    }
+        // SỬA LẠI: Dùng JavaScript thuần
+        const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        notification.innerHTML =
+            '<i class="fas ' + iconClass + '"></i>' +
+            '<span style="margin-left: 10px;">' + message + '</span>';
 
-    // Update progress on input
-    fields.forEach(field => {
-        const element = document.getElementById(field.id);
-        if (element) {
-            element.addEventListener('input', calculateProgress);
-            element.addEventListener('change', calculateProgress);
-        }
-    });
+        document.body.appendChild(notification);
 
-    // Initialize progress
-    document.addEventListener('DOMContentLoaded', function() {
-        calculateProgress();
-
-        // Add date validation
-        const dateInput = document.getElementById('dateOfBirth');
-        if (dateInput) {
-            dateInput.addEventListener('blur', function() {
-                validateDate(this);
-            });
-        }
-
-        // Add floating label effect
-        const floatingInputs = document.querySelectorAll('.floating-label .form-control');
-        floatingInputs.forEach(input => {
-            // Check initial value
-            if (input.value.trim() !== '') {
-                input.parentElement.classList.add('has-value');
-            }
-
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
-            });
-
-            input.addEventListener('blur', function() {
-                this.parentElement.classList.remove('focused');
-                if (this.value.trim() !== '') {
-                    this.parentElement.classList.add('has-value');
-                } else {
-                    this.parentElement.classList.remove('has-value');
-                }
-            });
-        });
-    });
-
-    // Date validation
-    function validateDate(input) {
-        const datePattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-        const match = input.value.match(datePattern);
-
-        if (!match) {
-            showError(input, 'Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng dd/mm/yyyy');
-            return false;
-        }
-
-        const day = parseInt(match[1], 10);
-        const month = parseInt(match[2], 10);
-        const year = parseInt(match[3], 10);
-
-        // Check date validity
-        const date = new Date(year, month - 1, day);
-        if (date.getFullYear() !== year ||
-            date.getMonth() !== month - 1 ||
-            date.getDate() !== day) {
-            showError(input, 'Ngày không hợp lệ');
-            return false;
-        }
-
-        // Check if date is in the future
-        const today = new Date();
-        if (date > today) {
-            showError(input, 'Ngày sinh không thể ở tương lai');
-            return false;
-        }
-
-        // Check if age is reasonable (e.g., between 10 and 120 years)
-        const age = today.getFullYear() - year;
-        if (age < 10 || age > 120) {
-            showError(input, 'Tuổi không hợp lệ (phải từ 10 đến 120 tuổi)');
-            return false;
-        }
-
-        clearError(input);
-        return true;
-    }
-
-    // Error handling
-    function showError(input, message) {
-        clearError(input);
-
-        const error = document.createElement('div');
-        error.className = 'input-error';
-        error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
-
-        input.parentElement.appendChild(error);
-        input.classList.add('error');
-    }
-
-    function clearError(input) {
-        const error = input.parentElement.querySelector('.input-error');
-        if (error) {
-            error.remove();
-        }
-        input.classList.remove('error');
-    }
-
-    // Form submission
-    form.addEventListener('submit', function(e) {
-        let isValid = true;
-
-        // Validate all required fields
-        fields.forEach(field => {
-            if (field.required) {
-                const element = document.getElementById(field.id);
-                if (element && element.value.trim() === '') {
-                    isValid = false;
-                    showError(element, 'Trường này là bắt buộc');
-                }
-            }
-        });
-
-        // Validate date
-        const dateInput = document.getElementById('dateOfBirth');
-        if (dateInput && !validateDate(dateInput)) {
-            isValid = false;
-        }
-
-        // Validate email format
-        const emailInput = document.getElementById('email');
-        if (emailInput && emailInput.value.trim() !== '') {
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(emailInput.value)) {
-                isValid = false;
-                showError(emailInput, 'Địa chỉ email không hợp lệ');
-            }
-        }
-
-        if (!isValid) {
-            e.preventDefault();
-
-            // Show error message
-            const submitBtn = form.querySelector('.submit-btn');
-            const originalText = submitBtn.querySelector('.btn-text').textContent;
-            submitBtn.querySelector('.btn-text').textContent = 'Vui lòng kiểm tra lại thông tin';
-            submitBtn.classList.add('error');
-
+        // Tự động xóa sau 3 giây
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
             setTimeout(() => {
-                submitBtn.querySelector('.btn-text').textContent = originalText;
-                submitBtn.classList.remove('error');
-            }, 2000);
-
-            // Scroll to first error
-            const firstError = form.querySelector('.error');
-            if (firstError) {
-                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        } else {
-            // Show loading state
-            const submitBtn = form.querySelector('.submit-btn');
-            const originalText = submitBtn.querySelector('.btn-text').textContent;
-            submitBtn.querySelector('.btn-text').textContent = 'Đang xử lý...';
-            submitBtn.disabled = true;
-            submitBtn.classList.add('loading');
-        }
-    });
-
-    // Add date picker hint
-    const dateInput = document.getElementById('dateOfBirth');
-    if (dateInput) {
-        dateInput.addEventListener('focus', function() {
-            if (!this.value) {
-                this.value = '__/__/____';
-                this.setSelectionRange(0, 2);
-            }
-        });
-
-        dateInput.addEventListener('keydown', function(e) {
-            // Auto-format date as user types
-            const key = e.key;
-            const value = this.value;
-
-            if (key >= '0' && key <= '9') {
-                // Get cursor position
-                const cursorPos = this.selectionStart;
-
-                // If at slash position, move forward
-                if (value[cursorPos] === '/') {
-                    this.setSelectionRange(cursorPos + 1, cursorPos + 1);
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
                 }
-
-                // Auto-insert slashes
-                if (cursorPos === 2 || cursorPos === 5) {
-                    setTimeout(() => {
-                        if (this.value.length === 2 || this.value.length === 5) {
-                            this.value += '/';
-                        }
-                    }, 10);
-                }
-            }
-        });
+            }, 300);
+        }, 3000);
     }
 </script>
 </body>
